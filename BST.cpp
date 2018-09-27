@@ -26,11 +26,11 @@ template<typename T>
 void BST::deleteNode(T key){}
 
 // returns node * with data mathing key
-template<typename T>
-node<T> * BST::search(T key){}
+template<typename T> // TODO 1st
+node<T> * BST::search(T key){} 
 
 // prints tree
-template<typename T>
+template<typename T> 
 void BST::print(){}
 
 // add nodes for all elements in vector
