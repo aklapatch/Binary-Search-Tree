@@ -70,10 +70,6 @@ node<T> * BST<T>::search(T key){
 	std::cerr << "No match found, returning NULL\n";
 	return tmp;
 }
-template <typename T>
-void fancyPrint(node<T> * input_node, int node_number){
-	
-}
 
 void printSpace(int num_spaces){
 	for(int i =0; i < num_spaces; ++i){
@@ -86,14 +82,22 @@ template<typename T>
 void strayPrint(node<T> * current, int depth, int stray){
 	int scale = 3;
 }
+template <typename T> 
+struct pair{
+	node<T> * a_node;
+	int depth;
+}
 
+template <typename T> 
+void getVector(std::vector<pair> input_vector)
+
+// current plan, recursive, change depth and stray value when going down or left or right 
 // prints tree
 template<typename T> 
 void BST<T>::print(){
-	// prints left and right node first, then goes down another level
-	// and prints the information necessary
-	// preorder traversal, prints the roots of the node
-	strayPrint(&root, 0, size()/2);
+	std::vector<pair> pair_array;
+	
+	
 }
 
 template <typename T>
