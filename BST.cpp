@@ -92,6 +92,7 @@ template <typename T>
 void getVector(std::vector<pair> input_vector)
 
 // current plan, recursive, change depth and stray value when going down or left or right 
+// vector gets passed to recursive function that returns proper vector if necessary
 // prints tree
 template<typename T> 
 void BST<T>::print(){
