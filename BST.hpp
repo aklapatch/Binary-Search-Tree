@@ -6,7 +6,7 @@
 
 // node structure for tree
 template<typename T>
-typedef struct node {
+struct node {
 
     // key data and other node pointers
     T data;
@@ -24,11 +24,11 @@ typedef struct node {
     }
 
     // assigns args to internal data members
-    node(T data_in, node * parent_in, node * left_child_in, node * right_child_in){
+    node(T data_in, node * parent_in){
         data = data_in;
         parent = parent_in;
-        left_child = left_child_in;
-        right_child = right_child_in;
+        left_child = NULL;
+        right_child = NULL;
     }
 
     // sets pointers to input arguments
@@ -40,9 +40,6 @@ typedef struct node {
 
     // delete allocated memory
     ~node(){
-        if(parent != NULL){
-            delete parent;
-        }
         if(left_child != NULL){
             delete left_child;
         }
@@ -50,8 +47,7 @@ typedef struct node {
             delete right_child;
         }
     }
-
-} node;
+};
 
 template<typename T>
 class BST {
@@ -75,6 +71,14 @@ class BST {
         void print(); // prints tree
 
         void addNodes(std::vector<T> input); // add nodes for elements in vector
+		
+		// internal function to add nodes recursively
+		void recursiveAddNodes(	std::vector<T> input_data, 
+							int start,
+							int end);
+		int size();
+		
+		T kthSmallest(int k);
 };
 
 #include "BST.cpp"
