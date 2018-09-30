@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <iostream>
-#include <stack>
+#include <algorithm>
 
 // node structure for tree
 template<typename T>

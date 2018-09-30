@@ -8,10 +8,6 @@ int main(){
 	
 	memcpy(testarray.data(),basearray , SIZE*sizeof(int));
 	
-	for(int i =0; i< testarray.size(); ++i){
-		std::cout << testarray[i] << "\n";
-	}
-	
 	BST<int> tree;
 	
 	tree.addNodes(testarray);

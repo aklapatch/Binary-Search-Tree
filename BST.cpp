@@ -77,28 +77,119 @@ void printSpace(int num_spaces){
 	}
 }
 
-// prints using a stray value for each node
-template<typename T> 
-void strayPrint(node<T> * current, int depth, int stray){
-	int scale = 3;
-}
 template <typename T> 
-struct pair{
-	node<T> * a_node;
+struct coords {
+	T data;
 	int depth;
+	int stray;
+
+	coords(T in_dat, int in_dep, int in_str){
+		data = in_dat;
+		depth = in_dep;
+		stray = in_str;
+	}
+
+	coords(){}
+};
+
+template <typename T>
+int leastIndex(std::vector<coords<T>>& input, int start){
+	int ret = start;
+	for(int i = start + 1 ; i < input.size(); ++i){
+		if(input[i].stray < input[ret].stray){
+			ret = i;
+		}
+	}
+	return ret;
 }
 
-template <typename T> 
-void getVector(std::vector<pair> input_vector)
+//uses bucket sort to sort the structs
+template <typename T>
+void coordsSort(std::vector<coords<T>>& input){
+	// using selection sort
+	for (int i=0; i < input.size(); ++i){
+		int least = leastIndex(input,i);
+		std::swap(input[i], input[least]);
+	}
+
+	for (int i=0; i < input.size(); ++i){
+		//std::cout << input[i].stray << " ";
+		//std::cout << "\n";
+	}
+     
+    
+} 
+
+
+template <class T>
+std::vector<coords<T>> getVector(node<T> * input, std::vector<coords<T>> input_vector, int depth, int stray){
+	
+	// store points for node 
+	coords<T> tmp(input->data, depth, stray);
+
+	// store data
+	input_vector.push_back(tmp);
+
+	// possibly travel to left node
+	if(input->left_child != NULL){
+		input_vector = getVector(input->left_child, input_vector, depth + 1, stray - 1); 
+	}
+
+	// possibly travel to right node
+	if(input->right_child != NULL){
+		input_vector = getVector(input->right_child, input_vector, depth + 1, stray + 1); 
+	}
+	
+	return input_vector;
+}
+
+
 
 // current plan, recursive, change depth and stray value when going down or left or right 
 // vector gets passed to recursive function that returns proper vector if necessary
 // prints tree
 template<typename T> 
 void BST<T>::print(){
-	std::vector<pair> pair_array;
+	// get all of the stats of the data pairs.
+	std::vector<coords<T>> array;
+			
+	array = getVector(&root, array, 1 , 0);
 	
-	
+	// separate the different depths.
+	int depth = 1;
+	std::vector<coords<T>> tmp_vec;
+	int number= 0;
+	while(array.size() > number ){
+		
+		for(int i =0; i < array.size(); ++i){
+			if(array[i].depth == depth){
+				tmp_vec.push_back(array[i]);
+				++number;
+			}
+		}
+		++depth;
+		
+		coordsSort(tmp_vec);
+
+		//plan. divide up the spaces depending on the number
+		// of items in the tree. then figure out the spacing 
+		//by dividing the size of the vector by the size of the tree.
+		
+		int spacing = (number == 1)? size()/tmp_vec.size(): size()/tmp_vec.size() ;
+
+		for(int i = 0; i < tmp_vec.size(); ++i){
+			printSpace(spacing);
+			std::cout << tmp_vec[i].data;
+		}
+		std::cout << "\n";
+		for(int i = 0; i < tmp_vec.size(); ++i){
+			printSpace(spacing);
+			std::cout << "/\\";
+		}
+		std::cout << "\n";
+
+		tmp_vec.resize(0);
+	}
 }
 
 template <typename T>
