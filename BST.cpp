@@ -110,14 +110,7 @@ void coordsSort(std::vector<coords<T>>& input){
 	for (int i=0; i < input.size(); ++i){
 		int least = leastIndex(input,i);
 		std::swap(input[i], input[least]);
-	}
-
-	for (int i=0; i < input.size(); ++i){
-		//std::cout << input[i].stray << " ";
-		//std::cout << "\n";
-	}
-     
-    
+	} 
 } 
 
 
@@ -190,9 +183,7 @@ void BST<T>::print(){
 }
 
 template <typename T>
-void BST<T>::recursiveAddNodes(std::vector<T> input_data, 
-							int start,
-							int end){								
+void BST<T>::recursiveAddNodes(std::vector<T> input_data, int start, int end){								
 	if(start == end){
 		addNode(input_data[start]);
 		
