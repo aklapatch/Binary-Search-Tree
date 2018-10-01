@@ -93,7 +93,7 @@ struct coords {
 };
 
 template <typename T>
-int leastIndex(std::vector<coords<T>>& input, int start){
+int leastIndex(std::vector<coords<T> >& input, int start){
 	int ret = start;
 	for(int i = start + 1 ; i < input.size(); ++i){
 		if(input[i].stray < input[ret].stray){
@@ -105,7 +105,7 @@ int leastIndex(std::vector<coords<T>>& input, int start){
 
 //uses bucket sort to sort the structs
 template <typename T>
-void coordsSort(std::vector<coords<T>>& input){
+void coordsSort(std::vector<coords<T> >& input){
 	// using selection sort
 	for (int i=0; i < input.size(); ++i){
 		int least = leastIndex(input,i);
@@ -115,7 +115,7 @@ void coordsSort(std::vector<coords<T>>& input){
 
 
 template <class T>
-std::vector<coords<T>> getVector(node<T> * input, std::vector<coords<T>> input_vector, int depth, int stray){
+std::vector<coords<T> > getVector(node<T> * input, std::vector<coords<T> > input_vector, int depth, int stray){
 	
 	// store points for node 
 	coords<T> tmp(input->data, depth, stray);
@@ -144,13 +144,13 @@ std::vector<coords<T>> getVector(node<T> * input, std::vector<coords<T>> input_v
 template<typename T> 
 void BST<T>::print(){
 	// get all of the stats of the data pairs.
-	std::vector<coords<T>> array;
+	std::vector<coords<T> > array;
 			
 	array = getVector(&root, array, 0 , 0);
 	
 	// separate the different depths.
 	int depth = 0;
-	std::vector<coords<T>> tmp_vec;
+	std::vector<coords<T> > tmp_vec;
 	int number= 0;
 	while(array.size() > number ){
 		
@@ -163,18 +163,14 @@ void BST<T>::print(){
 		++depth;
 		
 		coordsSort(tmp_vec);
-
-		//plan. divide up the spaces depending on the number
-		// of items in the tree. then figure out the spacing 
-		//by dividing the size of the vector by the size of the tree.
-		
-		int spacing = (number == 1)? 0 : size() + size()%2 - 3*depth;
+	
+		int spacing = (number == 1)? 0: 2 ;
 		int indent = size() - 1 - 4*depth;
 		std::cout << "Nodes at depth " << depth << ":\n";
 		for(int i = 0; i < tmp_vec.size(); ++i){
 			
 			std::cout << tmp_vec[i].data << "  ";
-			//printSpace(spacing);
+			printSpace(spacing);
 		}
 		std::cout << std::endl;
 
