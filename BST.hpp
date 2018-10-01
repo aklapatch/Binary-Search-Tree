@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <stack>
 
 // node structure for tree
 template<typename T>

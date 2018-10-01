@@ -153,10 +153,10 @@ void BST<T>::print(){
 	// get all of the stats of the data pairs.
 	std::vector<coords<T>> array;
 			
-	array = getVector(&root, array, 1 , 0);
+	array = getVector(&root, array, 0 , 0);
 	
 	// separate the different depths.
-	int depth = 1;
+	int depth = 0;
 	std::vector<coords<T>> tmp_vec;
 	int number= 0;
 	while(array.size() > number ){
@@ -175,18 +175,15 @@ void BST<T>::print(){
 		// of items in the tree. then figure out the spacing 
 		//by dividing the size of the vector by the size of the tree.
 		
-		int spacing = (number == 1)? size()/tmp_vec.size(): size()/tmp_vec.size() ;
-
+		int spacing = (number == 1)? 0 : size() + size()%2 - 3*depth;
+		int indent = size() - 1 - 4*depth;
+		std::cout << "Nodes at depth " << depth << ":\n";
 		for(int i = 0; i < tmp_vec.size(); ++i){
-			printSpace(spacing);
-			std::cout << tmp_vec[i].data;
+			
+			std::cout << tmp_vec[i].data << "  ";
+			//printSpace(spacing);
 		}
-		std::cout << "\n";
-		for(int i = 0; i < tmp_vec.size(); ++i){
-			printSpace(spacing);
-			std::cout << "/\\";
-		}
-		std::cout << "\n";
+		std::cout << std::endl;
 
 		tmp_vec.resize(0);
 	}
@@ -247,24 +244,27 @@ int BST<T>::size(){
 
 template <typename T>
 T BST<T>::kthSmallest(int k){
-	// go to least node, then second least, until you have traversed k times.
-	node<T> * tmp = &root;
-	// go to least node
-	while(tmp->left_child != NULL){
-		tmp = tmp->left_child;
-	}
 	
-	// traverse the correct number of times
-	int i = 0;
-	while(++i < 1){
-		if(tmp->right_child == NULL){
-			tmp = tmp->parent;
-		} else {
-			tmp = tmp->right_child;
+	std::stack<node<T> *> node_stack;
+	node<T> * tmp = &root;
+	int traversals = 0;
+
+	while (traversals < k &&( tmp != NULL || node_stack.empty() == false)){
+
+		while(tmp != NULL){
+			node_stack.push(tmp);
+			tmp = tmp->left_child;
+		}
+
+		tmp = node_stack.top();
+		node_stack.pop();
+
+		++traversals;
+
+		if(traversals < k){
+			tmp = tmp->right_child;			
 		}
 	}
-	
+
 	return tmp->data;
 }
-
-
