@@ -9,17 +9,6 @@ BST<T>::BST(T data_in){
     root.data = data_in;
 }  
 
-// destructor
-template<typename T>
-BST<T>::~BST(){
-	if(root.left_child != NULL){
-		delete root.left_child;
-	}
-	if(root.right_child != NULL){
-		delete root.right_child;
-	}
-}
-
 // adds new node in right spot
 template<typename T>
 void BST<T>::addNode(T data_in){
@@ -47,19 +36,22 @@ void BST<T>::deleteNode(T key){
 }
 
 // returns node * with data mathing key
-template<typename T> // TODO 1st
+template<typename T>
 node<T> * BST<T>::search(T key){
 	node<T> * tmp = &root;
 	while(tmp != NULL){
+		// if match is found
 		if(key ==tmp->data){
 			return tmp;
 			
+		// no match, but data is higher that node's data
 		} else if(key > tmp->data ){
 			if(tmp->right_child == NULL){
 				return tmp;
 			}
 			tmp = tmp->right_child;
-			
+		
+		// no match. data is lower than node's data
 		} else if(key < tmp->data) {
 			if(tmp->left_child == NULL){
 				return tmp;
@@ -71,113 +63,38 @@ node<T> * BST<T>::search(T key){
 	return tmp;
 }
 
-void printSpace(int num_spaces){
-	for(int i =0; i < num_spaces; ++i){
-		std::cout << " ";
-	}
-}
-
-template <typename T> 
-struct coords {
-	T data;
-	int depth;
-	int stray;
-
-	coords(T in_dat, int in_dep, int in_str){
-		data = in_dat;
-		depth = in_dep;
-		stray = in_str;
-	}
-
-	coords(){}
-};
-
-template <typename T>
-int leastIndex(std::vector<coords<T> >& input, int start){
-	int ret = start;
-	for(int i = start + 1 ; i < input.size(); ++i){
-		if(input[i].stray < input[ret].stray){
-			ret = i;
-		}
-	}
-	return ret;
-}
-
-//uses bucket sort to sort the structs
-template <typename T>
-void coordsSort(std::vector<coords<T> >& input){
-	// using selection sort
-	for (int i=0; i < input.size(); ++i){
-		int least = leastIndex(input,i);
-		std::swap(input[i], input[least]);
-	} 
-} 
-
-
+// print node and child data recursively
 template <class T>
-std::vector<coords<T> > getVector(node<T> * input, std::vector<coords<T> > input_vector, int depth, int stray){
+void BST<T>::recursivePrint(node<T> * current){
+	if(current == &root){
+		std::cout << "Root Data: " << current->data << "\n";
 	
-	// store points for node 
-	coords<T> tmp(input->data, depth, stray);
-
-	// store data
-	input_vector.push_back(tmp);
-
-	// possibly travel to left node
-	if(input->left_child != NULL){
-		input_vector = getVector(input->left_child, input_vector, depth + 1, stray - 1); 
+	} else {
+		std::cout << "Node Data: " << current->data << "\n";
 	}
 
-	// possibly travel to right node
-	if(input->right_child != NULL){
-		input_vector = getVector(input->right_child, input_vector, depth + 1, stray + 1); 
+	if(current->left_child != NULL){
+		std::cout << "Left Child Data: " << current->left_child->data << "\n";
 	}
-	
-	return input_vector;
+	if(current->right_child != NULL){
+		std::cout << "Right Child Data: " << current->right_child->data << "\n";
+	}
+
+	if(current->left_child != NULL){
+		recursivePrint(current->left_child);
+	}
+	if(current->right_child != NULL){
+		recursivePrint(current->right_child);
+	}
 }
 
-
-
-// current plan, recursive, change depth and stray value when going down or left or right 
-// vector gets passed to recursive function that returns proper vector if necessary
-// prints tree
+// plan: preorder recursive function that prints of each node and its children
 template<typename T> 
 void BST<T>::print(){
-	// get all of the stats of the data pairs.
-	std::vector<coords<T> > array;
-			
-	array = getVector(&root, array, 0 , 0);
-	
-	// separate the different depths.
-	int depth = 0;
-	std::vector<coords<T> > tmp_vec;
-	int number= 0;
-	while(array.size() > number ){
-		
-		for(int i =0; i < array.size(); ++i){
-			if(array[i].depth == depth){
-				tmp_vec.push_back(array[i]);
-				++number;
-			}
-		}
-		++depth;
-		
-		coordsSort(tmp_vec);
-	
-		int spacing = (number == 1)? 0: 2 ;
-		int indent = size() - 1 - 4*depth;
-		std::cout << "Nodes at depth " << depth << ":\n";
-		for(int i = 0; i < tmp_vec.size(); ++i){
-			
-			std::cout << tmp_vec[i].data << "  ";
-			printSpace(spacing);
-		}
-		std::cout << std::endl;
-
-		tmp_vec.resize(0);
-	}
+	recursivePrint(&root);
 }
 
+// add data from the array in the range specified
 template <typename T>
 void BST<T>::recursiveAddNodes(std::vector<T> input_data, int start, int end){								
 	if(start == end){
@@ -209,6 +126,7 @@ void BST<T>::addNodes(std::vector<T> input){
 	recursiveAddNodes(input, median+1, input.size() - 1);	 
 }
 
+// finds the number of children on a node
 template<typename T>
 int children(node<T> * parent){
 	
@@ -229,9 +147,15 @@ int BST<T>::size(){
 	return count;
 }
 
+//finds the kth Smallest number on the tree
 template <typename T>
 T BST<T>::kthSmallest(int k){
 	
+	if(k > size()){
+		std::cerr << "K is greater than tree size. Returning root data.\n";
+		return root.data;
+	}
+
 	std::stack<node<T> *> node_stack;
 	node<T> * tmp = &root;
 	int traversals = 0;
@@ -246,7 +170,7 @@ T BST<T>::kthSmallest(int k){
 		tmp = node_stack.top();
 		node_stack.pop();
 
-		++traversals;
+		++traversals;   // keep track of the nodes that have been cycled through
 
 		if(traversals < k){
 			tmp = tmp->right_child;			

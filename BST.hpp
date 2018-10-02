@@ -58,11 +58,11 @@ class BST {
         node<T> root;
 
     public:
-        BST(); // default 
+        BST(); 
 
         BST(T data_in);  // inits root's data
 
-        ~BST(); // destructor
+        ~BST(){} // deletes node data
 
         void addNode(T data_in); // adds new node in right spot
 
@@ -78,9 +78,14 @@ class BST {
 		void recursiveAddNodes(	std::vector<T> input_data, 
 							int start,
 							int end);
+		// return tree size
 		int size();
 		
+		// returns kth smallest data
 		T kthSmallest(int k);
+
+		// prints tree starting from current
+		void recursivePrint(node<T> * current);
 };
 
 #include "BST.cpp"
