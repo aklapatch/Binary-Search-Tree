@@ -67,18 +67,19 @@ node<T> * BST<T>::search(T key){
 template <class T>
 void BST<T>::recursivePrint(node<T> * current){
 	if(current == &root){
-		std::cout << "Root Data: " << current->data << "\n";
+		std::cout << "Root Data: " << current->data << "  ";
 	
 	} else {
-		std::cout << "Node Data: " << current->data << "\n";
+		std::cout << "Node Data: " << current->data << "  ";
 	}
 
 	if(current->left_child != NULL){
-		std::cout << "Left Child Data: " << current->left_child->data << "\n";
+		std::cout << "Left Child Data: " << current->left_child->data << "  ";
 	}
 	if(current->right_child != NULL){
-		std::cout << "Right Child Data: " << current->right_child->data << "\n";
+		std::cout << "Right Child Data: " << current->right_child->data << "  ";
 	}
+	std::cout << "\n";
 
 	if(current->left_child != NULL){
 		recursivePrint(current->left_child);

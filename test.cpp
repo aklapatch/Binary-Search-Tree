@@ -41,7 +41,7 @@ int main(int argc, char ** argv){
 	tree.print();
 
 	// print out kth lowest item
-	std::cout <<"Kth lowest " << tree.kthSmallest(kth) << std::endl;	
+	std::cout <<"\nKth lowest: " << tree.kthSmallest(kth) << std::endl;	
 
     return 0;
 }
